@@ -33,7 +33,10 @@ func (app *application) mount() *chi.Mux {
 	r.Use(middleware.Logger)
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
-		r.Route()
+		r.Route("/posts", func (r chi.Router) {
+			//r.Get("/", app.listPostsHandler)
+			r.Post("/", app.createPostHandler)
+		})
 	})
 	return r
 }
