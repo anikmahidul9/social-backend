@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/anikmahidul9/social/internal/auth"
 	"github.com/anikmahidul9/social/internal/store"
 	"github.com/go-chi/chi/v5"
 
@@ -14,11 +15,13 @@ import (
 type application struct {
 	config config
 	store  store.Storage
+	jwt    *auth.JWTAuthenticator
 }
 
 type config struct {
 	addr string
 	db   dbConfig
+	auth authConfig
 }
 
 type dbConfig struct {
@@ -26,6 +29,9 @@ type dbConfig struct {
 	maxOpenConns int
 	maxIdleConns int
 	maxIdleTime  string
+}
+type authConfig struct {
+	secret string
 }
 
 func (app *application) mount() *chi.Mux {
@@ -43,13 +49,26 @@ func (app *application) mount() *chi.Mux {
 			})
 		})
 		r.Route("/users", func(r chi.Router) {
-		//	r.Post("/", app.createPostHandler)
+			//	r.Post("/", app.createPostHandler)
 			r.Route("/{userID}", func(r chi.Router) {
+				r.Use(app.usersContextMiddleware)
 				r.Get("/", app.getUserHandler)
 				// r.Patch("/", app.updatePostHandler)
 				// r.Delete("/", app.deletePostHandler)
+				r.Put("/follow", app.followUserHandler)
+				r.Put("/unfollow", app.unfollowUserHandler)
+			})
+
+			r.Group(func(r chi.Router) {
+				r.Use(app.AuthTokenMiddleware)
+				r.Get("/feed", app.getUserFeedHandler)
 			})
 		})
+		r.Route("/authentication", func(r chi.Router) {
+			r.Post("/user", app.registerUserHandler)
+			r.Post("/login", app.loginHandler)
+		})
+
 	})
 	return r
 }
