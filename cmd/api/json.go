@@ -34,3 +34,12 @@ func (app *application) jsonResponse(w http.ResponseWriter, status int, data any
 	}
 	return writeJSON(w, status, &envelope{Data: data})
 }
+func (app *application) forbiddenResponse(w http.ResponseWriter, r *http.Request) {
+	writeJSON(
+		w,
+		http.StatusForbidden,
+		map[string]string{
+			"error": "you are not allowed to perform this action",
+		},
+	)
+}

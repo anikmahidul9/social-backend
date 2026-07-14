@@ -1,6 +1,8 @@
 package auth
 
-import "context"
+import (
+	"context"
+)
 
 type contextKey string
 
@@ -16,3 +18,5 @@ func GetUserID(ctx context.Context) (int64, bool) {
 
 	return id, ok
 }
+
+

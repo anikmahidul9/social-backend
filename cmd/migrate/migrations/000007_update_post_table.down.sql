@@ -1,0 +1,7 @@
+ALTER TABLE posts
+DROP COLUMN IF EXISTS visibility;
+
+DROP TYPE IF EXISTS post_visibility;
+
+ALTER TABLE posts
+ADD COLUMN tags TEXT[];
