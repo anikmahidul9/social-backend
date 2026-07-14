@@ -101,20 +101,30 @@ JWT_SECRET=my-super-secret-key-123456
 CREATE DATABASE social;
 ```
 
-📦 Database Migration
+## 📦 Database Migration
 
 Before running the application, apply the database migrations.
 
-Run Migrations
+### Run Migrations
+
+```bash
 migrate -path=./cmd/migrate/migrations \
   -database "postgres://postgres:password@localhost:5432/social?sslmode=disable" \
   up
-Roll Back the Last Migration
+```
+
+### Roll Back the Last Migration
+
+```bash
 migrate -path=./cmd/migrate/migrations \
   -database "postgres://postgres:password@localhost:5432/social?sslmode=disable" \
   down 1
+```
 
-Note: Make sure the migrate CLI is installed before running these commands.
+> **Note:** Make sure the `migrate` CLI is installed before running these commands.
+
+---
+
 
 ---
 
