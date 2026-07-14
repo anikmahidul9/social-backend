@@ -101,7 +101,20 @@ JWT_SECRET=my-super-secret-key-123456
 CREATE DATABASE social;
 ```
 
-Run your database migrations (if applicable) before starting the server.
+📦 Database Migration
+
+Before running the application, apply the database migrations.
+
+Run Migrations
+migrate -path=./cmd/migrate/migrations \
+  -database "postgres://postgres:password@localhost:5432/social?sslmode=disable" \
+  up
+Roll Back the Last Migration
+migrate -path=./cmd/migrate/migrations \
+  -database "postgres://postgres:password@localhost:5432/social?sslmode=disable" \
+  down 1
+
+Note: Make sure the migrate CLI is installed before running these commands.
 
 ---
 
